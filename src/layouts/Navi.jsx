@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Container, Menu } from 'semantic-ui-react'
+import SaveSummary from './SaveSummary'
 import SignedIn from './SignedIn'
 import SignedOut from './SignedOut'
+import { useSelector } from 'react-redux';
 
 export default function Navi() {
 
+    const { saveItems } = useSelector(state => state.save)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
 
     function handleSignOut() {
@@ -27,6 +30,7 @@ export default function Navi() {
                         name='messages'
                     />
                     <Menu.Menu position='right'>
+                        {saveItems.length > 0 && <SaveSummary />}
                         {isAuthenticated ? <SignedIn signOut={handleSignOut} />
                             : <SignedOut signIn={handleSignIn} />}
                     </Menu.Menu>

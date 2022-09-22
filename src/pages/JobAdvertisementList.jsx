@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Icon, Menu } from 'semantic-ui-react'
+import { useDispatch } from 'react-redux'
+import { Table, Icon, Menu, Button } from 'semantic-ui-react'
 import JobAdvertisementService from '../services/jobAdvertisementService'
+import { addToSaved } from '../store/actions/saveActions'
 
 export default function JobAdvertisementList() {
+
+    const dispatch = useDispatch()
 
     const [jobAdvertisements, setJobAdvertisements] = useState([])
 
@@ -11,6 +15,10 @@ export default function JobAdvertisementList() {
         jobAdvertisementService.getAllJobAdvertisements().then(result => setJobAdvertisements(result.data.data))
 
     }, [])
+
+    const handleAddToSaved = (jobAdvertisement) => {
+        dispatch(addToSaved(jobAdvertisement))
+    }
 
     return (
         <div>
@@ -24,6 +32,7 @@ export default function JobAdvertisementList() {
                         <Table.HeaderCell>Employer</Table.HeaderCell>
                         <Table.HeaderCell>Release Date</Table.HeaderCell>
                         <Table.HeaderCell>Application Deadline</Table.HeaderCell>
+                        <Table.HeaderCell></Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
 
@@ -38,6 +47,8 @@ export default function JobAdvertisementList() {
                                 <Table.Cell>{jobAdvertisement.employer.companyName}</Table.Cell>
                                 <Table.Cell>{jobAdvertisement.releaseDate}</Table.Cell>
                                 <Table.Cell>{jobAdvertisement.applicationDeadline}</Table.Cell>
+                                <Table.Cell><Button onClick={() => handleAddToSaved(jobAdvertisement)}>Kaydet</Button></Table.Cell>
+
                             </Table.Row>
                         ))
                     }
